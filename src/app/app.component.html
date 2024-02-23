@@ -28,13 +28,13 @@
     La grille de calcul suivante permet de calculer les différentes zones:
   </p>
   <span id="input-zone">
-    Age: <input type="number" [(ngModel)] = "age" />
+    Age: <input type="number" [(ngModel)] = "age" (change)="rafraichirFcMax()" />
     FC Minimale: <input type="number" [(ngModel)] = "fcMinimale" /> &nbsp;
-    <label><input type="radio" [(ngModel)]="sexe" [value]="sexeType.Homme">Homme</label>
-    <label><input type="radio" [(ngModel)]="sexe" [value]="sexeType.Femme">Femme</label>
-    <label><input type="radio" [(ngModel)]="sexe" [value]="sexeType.Universel">Utiliser la méthode universelle</label>
+    <label><input type="radio" [(ngModel)]="sexe" [value]="sexeType.Homme" (change)="rafraichirFcMax()" >Homme</label>
+    <label><input type="radio" [(ngModel)]="sexe" [value]="sexeType.Femme" (change)="rafraichirFcMax()" >Femme</label>
+    <label><input type="radio" [(ngModel)]="sexe" [value]="sexeType.Universel" (change)="rafraichirFcMax()" >Utiliser la méthode universelle</label>
   </span>
-  <p>FCM: {{getFcMax()}}</p>
+  <p>FCM: <input type="number" [(ngModel)] = "fcMaximale" />
   <div class="table-container">
     <table mat-table [dataSource]="getZoneDefs()" class="mat-elevation-z8">
       <ng-container matColumnDef="zoneId">

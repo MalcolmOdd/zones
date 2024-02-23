@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {MatTableModule} from '@angular/material/table';
 
@@ -9,12 +9,13 @@ import {MatTableModule} from '@angular/material/table';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   public age = 32;
   public fcMinimale = 58;
   public columnsToDisplay = ["zoneId", "pourcentage", "fcAstrand", "fcKarvonen", "pourcentageEquivalent"];
   public sexe: Sexe = Sexe.Universel;
   public sexeType = Sexe;
+  public fcMaximale = 999;
   public zoneDefs : ZoneDef [] = [
     new ZoneDef(1, 50),
     new ZoneDef(2, 60),
@@ -22,8 +23,13 @@ export class AppComponent {
     new ZoneDef(4, 80),
     new ZoneDef(5, 90),
   ];
-  
-  getFcMax() {
+  ngOnInit(): void {
+    this.rafraichirFcMax();
+  }
+  rafraichirFcMax() {
+    this.fcMaximale = this.calculerFcMax();
+  }
+  calculerFcMax() : number {
     switch(this.sexe) {
       case Sexe.Homme:
         return 220 - this.age;
@@ -34,12 +40,11 @@ export class AppComponent {
     }
   }
   getZoneDefs() {
-    const fcMax = this.getFcMax();
-    const topKarvonen = fcMax - this.fcMinimale;
+    const topKarvonen = this.fcMaximale - this.fcMinimale;
     for(var zone of this.zoneDefs) {
-      zone.fcAstrand = Math.floor(zone.pourcentage * fcMax / 100.0);
+      zone.fcAstrand = Math.floor(zone.pourcentage *  this.fcMaximale / 100.0);
       zone.fcKarvonen = Math.floor(zone.pourcentage * topKarvonen / 100.0) + this.fcMinimale;
-      zone.pourcentageEquivalent = Math.floor(100.0 * zone.fcKarvonen / fcMax);
+      zone.pourcentageEquivalent = Math.floor(100.0 * zone.fcKarvonen /  this.fcMaximale);
     }
     return this.zoneDefs;
   }
